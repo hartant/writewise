@@ -74,12 +74,12 @@ export function Article() {
           <tr>
             <td>US college application essays</td>
             <td>Words</td>
-            <td>The Common App personal essay allows up to 650 words</td>
+            <td>The Common App personal essay has long allowed up to 650 words</td>
           </tr>
           <tr>
             <td>UK university applications</td>
             <td>Characters</td>
-            <td>The UCAS personal statement allows up to 4,000 characters, including spaces</td>
+            <td>The UCAS personal statement (2026 entry onwards): three answers, 4,000 characters in total including spaces, at least 350 per answer</td>
           </tr>
           <tr>
             <td>Job application text boxes</td>

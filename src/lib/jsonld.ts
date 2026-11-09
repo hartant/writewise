@@ -70,7 +70,7 @@ export function articleLd(opts: {
     dateModified: opts.modified,
     inLanguage: "en",
     image: absoluteUrl("/opengraph-image"),
-    author: { "@type": "Organization", name: `${site.name} Editorial Team`, url: absoluteUrl("/about") },
+    author: { "@type": "Organization", name: site.name, url: absoluteUrl("/about") },
     publisher: {
       "@type": "Organization",
       name: site.name,

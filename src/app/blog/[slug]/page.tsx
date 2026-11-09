@@ -70,13 +70,18 @@ export default async function BlogPost({ params }: Props) {
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
                 <span className="inline-flex items-center gap-1.5">
                   <PenLine className="h-4 w-4" aria-hidden="true" />
-                  {site.name} Editorial Team
+                  Written by the {site.name} team
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <CalendarDays className="h-4 w-4" aria-hidden="true" />
                   <time dateTime={post.modified}>
                     {post.modified === post.published ? "Published" : "Updated"} {dateFmt.format(new Date(post.modified))}
                   </time>
+                  {post.reviewed && (
+                    <>
+                      {" · "}facts checked <time dateTime={post.reviewed}>{dateFmt.format(new Date(post.reviewed))}</time>
+                    </>
+                  )}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <Clock className="h-4 w-4" aria-hidden="true" />

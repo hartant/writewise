@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import { convertCase, type CaseMode } from "@/lib/text/case";
 import { countCharacters, countWords } from "@/lib/text/stats";
-import { CopyButton, fmt, Paper } from "./ui";
+import { CopyButton, DownloadButton, fmt, Paper, Segmented } from "./ui";
 
 const MODES: { id: CaseMode; label: string; example: string }[] = [
   { id: "sentence", label: "Sentence case", example: "A tale of two cities" },
@@ -21,13 +21,7 @@ export function CaseConverter() {
 
   return (
     <div className="space-y-6">
-      <div className="seg" role="radiogroup" aria-label="Choose a case">
-        {MODES.map((m) => (
-          <button key={m.id} type="button" role="radio" aria-checked={mode === m.id} onClick={() => setMode(m.id)} title={m.example}>
-            {m.label}
-          </button>
-        ))}
-      </div>
+      <Segmented label="Choose a case" value={mode} onChange={setMode} options={MODES.map((m) => ({ value: m.id, label: m.label, title: m.example }))} />
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Paper
           id="case-input"
@@ -54,9 +48,12 @@ export function CaseConverter() {
           footer={<span>Acronyms such as NASA and words like iPhone keep their capitals.</span>}
         />
       </div>
-      <button type="button" className="btn btn-secondary" onClick={() => setText(output)} disabled={!output || output === text}>
-        Use result as new input
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <DownloadButton filename="converted-text.txt" getText={() => output} disabled={!output} />
+        <button type="button" className="btn btn-ghost" onClick={() => setText(output)} disabled={!output || output === text}>
+          Use result as new input
+        </button>
+      </div>
     </div>
   );
 }

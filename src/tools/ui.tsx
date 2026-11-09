@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Check, Copy, Eraser, Sparkles } from "lucide-react";
+import { Check, Copy, Download, Eraser, Sparkles } from "lucide-react";
 
 /** Copies text to the clipboard, with a fallback for browsers without the async API. */
 export async function copyText(text: string): Promise<boolean> {
@@ -29,6 +29,109 @@ export async function copyText(text: string): Promise<boolean> {
   }
 }
 
+/** Saves text as a file. Built locally with a Blob, so nothing is uploaded. */
+export function downloadText(filename: string, text: string, mime = "text/plain") {
+  // A byte-order mark helps Excel open UTF-8 CSV files with accented characters intact.
+  const body = mime === "text/csv" ? "\uFEFF" + text : text;
+  const url = URL.createObjectURL(new Blob([body], { type: `${mime};charset=utf-8` }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export function DownloadButton({
+  filename,
+  getText,
+  label = "Download .txt",
+  mime,
+  disabled,
+}: {
+  filename: string;
+  getText: () => string;
+  label?: string;
+  mime?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <button type="button" className="btn btn-secondary" onClick={() => downloadText(filename, getText(), mime)} disabled={disabled}>
+      <Download className="h-4 w-4" aria-hidden="true" />
+      {label}
+    </button>
+  );
+}
+
+/**
+ * A row of mutually exclusive options with radio semantics: Tab focuses the group,
+ * arrow keys move the selection (WAI-ARIA radio group pattern).
+ */
+export function Segmented<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: { value: T; label: string; title?: string }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const keys: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+    if (!(e.key in keys)) return;
+    e.preventDefault();
+    const i = options.findIndex((o) => o.value === value);
+    const next = options[(i + keys[e.key] + options.length) % options.length];
+    onChange(next.value);
+    const btn = e.currentTarget.querySelector<HTMLButtonElement>(`[data-value="${CSS.escape(next.value)}"]`);
+    btn?.focus();
+  }
+  return (
+    <div className="seg" role="radiogroup" aria-label={label} onKeyDown={onKeyDown}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          data-value={o.value}
+          aria-checked={value === o.value}
+          tabIndex={value === o.value ? 0 : -1}
+          title={o.title}
+          onClick={() => onChange(o.value)}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** A labelled on/off switch with an optional explanation underneath. */
+export function Toggle({
+  label,
+  hint,
+  checked,
+  onChange,
+}: {
+  label: string;
+  hint?: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <label className="flex items-start justify-between gap-3 py-1.5">
+      <span>
+        <span className="block text-[0.95rem] font-bold text-ink">{label}</span>
+        {hint && <span className="block text-sm leading-5 text-muted">{hint}</span>}
+      </span>
+      <input type="checkbox" className="toggle mt-1" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+    </label>
+  );
+}
+
 export function CopyButton({
   getText,
   label = "Copy",
@@ -50,13 +153,13 @@ export function CopyButton({
     const ok = await copyText(getText());
     setState(ok ? "copied" : "failed");
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => setState("idle"), 1800);
+    timer.current = setTimeout(() => setState("idle"), ok ? 1800 : 4000);
   }
 
   return (
     <button type="button" className={`btn btn-${variant}`} onClick={onClick} disabled={disabled}>
       {state === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
-      <span aria-live="polite">{state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : label}</span>
+      <span aria-live="polite">{state === "copied" ? "Copied" : state === "failed" ? "Copy blocked: select the text and press Ctrl+C" : label}</span>
     </button>
   );
 }
@@ -91,7 +194,7 @@ export function Paper({
 }) {
   return (
     <div className="card overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-4 py-2 sm:px-6">
+      <div className="flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-4 py-1.5 sm:px-6">
         <label htmlFor={id} className="text-sm font-bold text-ink">
           {label}
         </label>

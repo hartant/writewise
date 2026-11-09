@@ -4,6 +4,11 @@
 > page and tool, the design system, the technical architecture, SEO, privacy, monetization plans and the current
 > status. It's written so that someone who has never seen the code can understand and review the project.
 
+> **Update, November 9, 2026:** WriteWise now has **13 tools** and **7 guides**. New: Text Cleaner, Sort Lines, Find and
+> Replace, Word Frequency Counter and Application Limit Checker (UCAS, Common App, custom limits); Remove Duplicate Lines
+> was upgraded with keep-first/keep-last/duplicates-only/unique-only modes. Sections below describe the original eight
+> tools; see `docs/UPGRADE-REPORT.md` for the full list of changes and `docs/WRITEWISE-AUDIT.md` for the audit.
+
 ---
 
 ## 1. Summary

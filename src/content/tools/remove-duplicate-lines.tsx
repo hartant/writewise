@@ -7,48 +7,89 @@ export function Guide() {
       <h2>How to remove duplicate lines</h2>
       <ol>
         <li>
-          <strong>Paste your list</strong> into the <em>Original lines</em> box, one item per line. Columns copied from a
-          spreadsheet work too.
+          <strong>Paste your list</strong> with one item per line. A column copied from a spreadsheet works too.
         </li>
         <li>
-          <strong>Pick your options.</strong> Decide whether capitalization matters, whether stray spaces should be ignored, and
-          whether to delete blank lines.
+          <strong>Choose what to keep</strong> and set the matching rules. The <em>What will happen</em> line describes the result in
+          plain English before you copy anything.
         </li>
         <li>
-          <strong>Copy the cleaned output.</strong> Unique lines appear instantly on the right, in their original order. Use{" "}
-          <em>Replace original with output</em> if you want to keep editing the cleaned version.
+          <strong>Copy or download the result.</strong> Your original list is never changed.
         </li>
       </ol>
 
-      <h2>What each option does</h2>
-      <h3>Ignore case</h3>
+      <h2>The four modes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>From a, b, a, c, b, a</th>
+            <th>Use it to</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Keep first copy</td>
+            <td>
+              <code>a, b, c</code>
+            </td>
+            <td>Clean a list while keeping its original order</td>
+          </tr>
+          <tr>
+            <td>Keep last copy</td>
+            <td>
+              <code>c, b, a</code>
+            </td>
+            <td>Keep the most recent entry in a log or export</td>
+          </tr>
+          <tr>
+            <td>Duplicates only</td>
+            <td>
+              <code>a, b</code>
+            </td>
+            <td>Find out which entries were repeated</td>
+          </tr>
+          <tr>
+            <td>Unique only</td>
+            <td>
+              <code>c</code>
+            </td>
+            <td>Find entries that appear exactly once</td>
+          </tr>
+        </tbody>
+      </table>
       <p>
-        When on, &quot;London&quot;, &quot;london&quot; and &quot;LONDON&quot; are treated as the same line, and only the first one you
-        entered is kept, with its original capitalization. Turn it on for email addresses and tags, which are usually
-        case-insensitive. Leave it off for passwords, codes or anything where capitalization changes the meaning.
+        The frequency table under the tool shows how many times each repeated line appears, most frequent first.
+      </p>
+
+      <h2>Matching options</h2>
+      <h3>Case-sensitive</h3>
+      <p>
+        When on, &quot;London&quot; and &quot;london&quot; are different lines. Turn it off for email addresses and tags, which are
+        usually case-insensitive; the first version you entered is the one that&apos;s kept.
       </p>
       <h3>Ignore extra spaces</h3>
       <p>
-        Spaces at the start or end of a line are invisible but make two lines technically different. With this option on
-        (the default), those spaces are ignored when comparing lines and trimmed from the output. Spaces inside a line are always
-        kept.
+        Spaces at the start or end of a line are invisible but make two lines technically different. With this on (the default),
+        they&apos;re ignored when comparing and trimmed from the result. Spaces inside a line always count.
       </p>
-      <h3>Remove empty lines</h3>
+      <h3>Remove blank lines and Sort A–Z</h3>
       <p>
-        When on, blank lines and lines containing only spaces are removed. When off, blank lines are left exactly where they are
-        and are never treated as duplicates, so lists divided into groups by blank lines keep their structure.
+        Blank lines are never treated as duplicates. In the two &quot;keep&quot; modes they stay where they are unless you remove them;
+        the other modes and sorting leave them out. Sorting is off by default because the tool never reorders your list unless you ask.
+        When on, it uses natural order (item2 before item10).
       </p>
 
-      <h2>How the first occurrence is preserved</h2>
+      <h2>How order is preserved</h2>
       <p>
-        The tool reads your text from top to bottom. The first time it sees a line, the line is kept. Every later copy of the
-        same line is removed. The order of the remaining lines never changes, and nothing is sorted. That makes it safe for
-        ordered data such as rankings, step-by-step instructions or chronological logs.
+        In <em>Keep first copy</em> mode, the tool reads your text from top to bottom. The first time it sees a line, the line is
+        kept, and every later copy is removed. The remaining lines keep their original order, and nothing is sorted unless you turn
+        on <em>Sort A–Z</em>. That makes it safe for ordered data such as rankings, step-by-step instructions or chronological logs.
       </p>
 
       <h2>Example</h2>
-      <p>With <em>Ignore case</em> on and <em>Remove empty lines</em> on, this input:</p>
-      <pre className="overflow-x-auto rounded-xl border border-line bg-surface-2 p-4 font-mono text-sm leading-6">
+      <p>With <em>Case-sensitive</em> off and <em>Remove blank lines</em> on, this input:</p>
+      <pre className="overflow-x-auto rounded border border-line bg-surface-2 p-4 font-mono text-sm leading-6">
         {`alex@example.com
 jordan@example.com
 Alex@example.com
@@ -57,13 +98,13 @@ Alex@example.com
 jordan@example.com`}
       </pre>
       <p>becomes:</p>
-      <pre className="overflow-x-auto rounded-xl border border-line bg-surface-2 p-4 font-mono text-sm leading-6">
+      <pre className="overflow-x-auto rounded border border-line bg-surface-2 p-4 font-mono text-sm leading-6">
         {`alex@example.com
 jordan@example.com
 sam@example.com`}
       </pre>
       <p>
-        The statistics show 6 original lines, 3 final lines, 2 duplicates removed and 1 empty line removed.
+        The tool reports 6 lines in, 3 lines out, 3 different values and 2 repeats removed, plus 1 blank line removed.
       </p>
 
       <h2>Common uses</h2>
@@ -74,9 +115,10 @@ sam@example.com`}
         <li>Building a list of unique tags, categories or product codes.</li>
       </ul>
       <p>
-        Want to see what changed between the original and cleaned versions? Paste both into{" "}
-        <Link href="/tools/text-compare">Text Compare</Link> and choose <em>Line by line</em>. To standardize capitalization
-        first, run your list through the <Link href="/tools/case-converter">Case Converter</Link>.
+        For a step-by-step walkthrough, including cleaning email lists, read{" "}
+        <Link href="/blog/how-to-remove-duplicate-lines-from-a-list">How to remove duplicate lines from a list</Link>. Lists copied from
+        documents often carry stray spaces or tabs; the <Link href="/tools/text-cleaner">Text Cleaner</Link> fixes those, and{" "}
+        <Link href="/tools/sort-lines">Sort Lines</Link> offers more sorting options.
       </p>
     </>
   );

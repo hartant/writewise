@@ -11,7 +11,7 @@ import { themeInitScript } from "@/components/theme-toggle";
 // Literata: a book face for headings. Atkinson Hyperlegible: body text built for legibility.
 // Courier Prime: the manuscript face, used for text being written and for numbers.
 const literata = Literata({ subsets: ["latin"], variable: "--font-literata", display: "swap", axes: ["opsz"] });
-const atkinson = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-atkinson", display: "swap" });
+const atkinson = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-atkinson", display: "swap", fallback: ["system-ui", "Segoe UI", "Arial", "sans-serif"] });
 const courier = Courier_Prime({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-courier", display: "swap" });
 
 export const metadata: Metadata = {

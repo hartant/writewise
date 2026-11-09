@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeftRight, GitCompareArrows, RotateCcw } from "lucide-react";
 import { diffTexts, type DiffMode, type DiffResult } from "@/lib/text/diff";
-import { fmt, Paper, Stat, StatGrid } from "./ui";
+import { fmt, Paper, Segmented, Stat, StatGrid } from "./ui";
 
 const SAMPLE_A = `Social media has changed the way students communicate. Most students check their phones many times a day, and this effects their ability to focus in class.`;
 const SAMPLE_B = `Social media has transformed the way students communicate. Many students check their phones dozens of times a day, and this affects their ability to concentrate in class.`;
@@ -31,17 +31,19 @@ export function TextCompare() {
     setCompared(null);
   }
 
-  // Ctrl/Cmd + Enter runs the comparison.
+  // Ctrl/Cmd + Enter runs the comparison. A ref keeps one listener with the latest state.
+  const compareRef = useRef(compare);
+  compareRef.current = compare;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         e.preventDefault();
-        compare();
+        compareRef.current();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -71,14 +73,15 @@ export function TextCompare() {
           <GitCompareArrows className="h-4 w-4" aria-hidden="true" />
           Compare texts
         </button>
-        <div className="seg" role="radiogroup" aria-label="Comparison detail">
-          <button type="button" role="radio" aria-checked={mode === "words"} onClick={() => setMode("words")}>
-            Word by word
-          </button>
-          <button type="button" role="radio" aria-checked={mode === "lines"} onClick={() => setMode("lines")}>
-            Line by line
-          </button>
-        </div>
+        <Segmented
+          label="Comparison detail"
+          value={mode}
+          onChange={setMode}
+          options={[
+            { value: "words", label: "Word by word" },
+            { value: "lines", label: "Line by line" },
+          ]}
+        />
         <button
           type="button"
           className="btn btn-secondary"

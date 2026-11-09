@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight } from "lucide-react";
-import { categories, tools } from "@/lib/tools";
+import { ArrowRight, FileCode2, Laptop, Server } from "lucide-react";
+import { categories, getTool, startHere, toolPath, tools } from "@/lib/tools";
 import { posts } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { organizationLd, websiteLd } from "@/lib/jsonld";
@@ -37,7 +37,7 @@ const specimens = [
 const faqs: FaqItem[] = [
   {
     q: "Is WriteWise free?",
-    a: "Yes. All eight tools are free, with no account, usage cap or trial. If advertising is added later to cover hosting, it will be kept away from the tools and will follow consent rules.",
+    a: "Yes. Every tool is free, with no account, usage cap or trial. If advertising is added later to cover hosting, it will be kept away from the tools and will follow consent rules.",
   },
   {
     q: "Do you store or read the text I paste?",
@@ -79,9 +79,13 @@ export default function HomePage() {
             <h1 className="max-w-[15ch] font-display text-[2.6rem] font-semibold leading-[1.04] tracking-[-0.02em] text-ink sm:text-[4rem]">
               Free word counter and writing tools
             </h1>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-ink-2">
-              Paste an essay, cover letter or post below to count it. The counting happens in this browser tab, so your writing
-              is never uploaded.
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-ink-2">
+              Count words and characters, check essays and UCAS or Common App answers against their limits, and clean up, sort or
+              compare text. Built for students, applicants and anyone who writes for work.
+            </p>
+            <p className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted">
+              Every tool runs inside this browser tab, so drafts you haven&apos;t submitted never leave your device. Free, with no
+              account.
             </p>
           </div>
           {/* On small screens the counter comes first and search follows it. */}
@@ -95,11 +99,65 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="container-ww mt-24" aria-labelledby="start-heading">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
+          <div>
+            <h2 id="start-heading" className="font-display text-[2rem] font-semibold leading-tight tracking-tight text-ink">
+              Start with these
+            </h2>
+            <p className="mt-3 leading-7 text-ink-2">Picked for the jobs people most often need a writing tool for.</p>
+          </div>
+          <div className="grid grid-cols-1 gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+            {startHere.map((slug) => (
+              <ToolCard key={slug} tool={getTool(slug)} headingLevel={3} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container-ww mt-24" aria-labelledby="privacy-heading">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
+          <div>
+            <h2 id="privacy-heading" className="font-display text-[2rem] font-semibold leading-tight tracking-tight text-ink">
+              Where your text goes
+            </h2>
+            <p className="mt-3 leading-7 text-ink-2">Nowhere. Here&apos;s how that works.</p>
+          </div>
+          <div>
+            <ol className="grid gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-3">
+              {[
+                { icon: Server, title: "1. The page loads", body: "Our host sends this page: HTML, styles, fonts and the tool code. That's the only download." },
+                { icon: Laptop, title: "2. You paste text", body: "It stays in this tab. The counting, cleaning and comparing run as JavaScript on your device." },
+                { icon: FileCode2, title: "3. Results appear", body: "Calculated locally. The tools have no upload step and no server to send your text to." },
+              ].map(({ icon: Icon, title, body }) => (
+                <li key={title} className="bg-surface p-5">
+                  <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                  <h3 className="mt-3 font-bold text-ink">{title}</h3>
+                  <p className="mt-1 text-[0.95rem] leading-6 text-ink-2">{body}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 max-w-2xl leading-7 text-ink-2">
+              <strong className="text-ink">Check it yourself:</strong> open your browser&apos;s developer tools, switch to the Network tab
+              and type into any tool. No request is made. The only thing a tool ever stores is opt-in: the{" "}
+              <Link href={toolPath("essay-word-goal-tracker")} className="pencil-link text-ink">
+                Essay Word Goal Tracker
+              </Link>{" "}
+              can keep a draft in your own browser if you switch that on. Details are in the{" "}
+              <Link href="/privacy" className="pencil-link text-ink">
+                Privacy Policy
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="container-ww mt-28" aria-labelledby="tools-heading">
         <div className="grid grid-cols-1 gap-x-12 gap-y-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <div>
             <h2 id="tools-heading" className="font-display text-[2rem] font-semibold leading-tight tracking-tight text-ink">
-              Tools
+              All tools
             </h2>
             <p className="mt-3 leading-7 text-ink-2">
               {tools.length} tools, each on its own page with a short guide to how it works.
@@ -165,11 +223,7 @@ export default function HomePage() {
                 ))}
               </tbody>
             </table>
-            <p className="mt-6 max-w-2xl leading-7 text-ink-2">
-              <strong className="text-ink">Check that nothing is uploaded.</strong> Open your browser&apos;s developer tools, switch
-              to the Network tab and type into any tool. You won&apos;t see a request, because there&apos;s nowhere for your text to
-              go.
-            </p>
+
           </div>
         </div>
       </section>
@@ -186,7 +240,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-x-10 sm:grid-cols-2">
-            {posts.map((p) => (
+            {posts.slice(0, 6).map((p) => (
               <PostCard key={p.slug} post={p} />
             ))}
           </div>

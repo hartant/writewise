@@ -4,9 +4,14 @@ A free, privacy-first writing and study toolkit for students, writers, job seeke
 Eight browser-based tools, original guides and a technical-SEO foundation, all built as a fast, statically
 generated Next.js site that runs on free hosting.
 
-| Tools | Guides | Trust pages |
-| --- | --- | --- |
-| Word Counter · Character Counter · Reading Time Calculator · Essay Word Goal Tracker · Remove Duplicate Lines · Case Converter · Paragraph Counter · Text Compare | How to count words in an essay · How to improve essay writing · How long to read 1,000 words · Word count vs. character count | About · Contact · Privacy · Terms · Disclaimer |
+**Tools (13):** Word Counter · Character Counter · Reading Time Calculator · Paragraph Counter · Word Frequency Counter ·
+Essay Word Goal Tracker · Application Limit Checker (UCAS, Common App, custom) · Remove Duplicate Lines · Text Cleaner ·
+Sort Lines · Case Converter · Find and Replace · Text Compare
+
+**Guides (7):** counting words in an essay · improving essay writing · reading 1,000 words · word vs. character count ·
+UCAS personal statement character count · cleaning text copied from a PDF · removing duplicate lines and emails
+
+**Trust pages:** About · Contact · Privacy · Terms · Disclaimer
 
 **Privacy model:** every tool processes text with JavaScript in the visitor's browser. No tool sends text to a
 server. With no environment variables set, the site loads no third-party scripts and sets no cookies.
@@ -46,7 +51,8 @@ src/
     tools/<slug>.tsx          Guide + FAQs rendered under each tool
     blog/<slug>.tsx           Article body + FAQs
   lib/
-    text/                     Pure, dependency-free text engines (stats, case, dedupe, diff)
+    text/                     Pure, dependency-free text engines (stats, case, dedupe, cleaner, sort,
+                              find-replace, frequency, app-limits, diff)
     tools.ts, posts.ts        Registries: titles, descriptions, related links, categories
     seo.ts, jsonld.ts, site.ts
     ai/                       Provider-neutral interface for future AI/paid APIs (disabled)
@@ -72,7 +78,7 @@ Open http://localhost:3000.
 
 ```bash
 npm run typecheck     # TypeScript, no emit
-npm test              # Unit tests for word/sentence/character counting, case, dedupe, diff
+npm test              # Unit tests for every text engine (counting, case, dedupe, cleaner, sort, find/replace, frequency, limits, diff)
 npm run build         # Production build (also type-checks)
 npm start             # Serve the production build on :3000
 npm run check-links   # In a second terminal: crawl every page and verify links, metadata, sitemap, 404s
@@ -160,6 +166,8 @@ management platform; see `docs/ADSENSE-READINESS.md`.
 
 ## Adding content
 
+- **Application rules:** UCAS and Common App limits live in `src/lib/text/app-limits.ts` with `verified` and date fields.
+  Re-check them against the official sources at the start of each application cycle.
 - **A new tool:** add an entry to `src/lib/tools.ts`, create `src/tools/<slug>.tsx` (client UI), and
   `src/content/tools/<slug>.tsx` (guide + FAQs), then copy any `src/app/tools/<slug>/page.tsx`. The sitemap,
   search, footer, tools index and related links update automatically.
@@ -170,5 +178,8 @@ Write for people first: original explanations, worked examples and honest sourci
 
 ## Further docs
 
+- [`docs/UPGRADE-REPORT.md`](docs/UPGRADE-REPORT.md): what changed in the latest upgrade, test results and launch checklist
+- [`docs/WRITEWISE-AUDIT.md`](docs/WRITEWISE-AUDIT.md): full audit with priorities and status
+- [`docs/KEYWORD-RESEARCH.md`](docs/KEYWORD-RESEARCH.md) and [`docs/KEYWORD-MAPPING.md`](docs/KEYWORD-MAPPING.md): search intent per page (no invented volumes)
 - [`docs/EXTENDING.md`](docs/EXTENDING.md): adding AI or paid-API features and premium plans later
 - [`docs/ADSENSE-READINESS.md`](docs/ADSENSE-READINESS.md): checklist before enabling advertising

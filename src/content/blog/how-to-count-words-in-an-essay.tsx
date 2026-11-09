@@ -140,7 +140,9 @@ export function Article() {
       <ul>
         <li>
           <strong>Application essays</strong> are usually hard limits enforced by the form itself. The Common App personal essay,
-          used by many US colleges, has a maximum of 650 words, and the text box won&apos;t accept more.
+          used by many US colleges, has long had a 650-word maximum; check the limit shown in your application, because the form
+          enforces whatever it displays. Our <Link href="/tools/application-limit-checker">Application Limit Checker</Link> handles
+          Common App, UCAS and custom limits.
         </li>
         <li>
           <strong>US and Canadian coursework</strong> often gives a range (&quot;1,000–1,250 words&quot;) or a page count. When a page

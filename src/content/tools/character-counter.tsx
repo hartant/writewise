@@ -29,7 +29,7 @@ export function Guide() {
       </p>
       <ul>
         <li>
-          <strong>University applications.</strong> The UCAS personal statement in the UK, for example, has a limit of 4,000
+          <strong>University applications.</strong> The UCAS personal statement in the UK, for example, has three answers sharing a limit of 4,000
           characters including spaces, and many scholarship portals cap answers by characters rather than words.
         </li>
         <li>

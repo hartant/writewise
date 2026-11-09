@@ -115,7 +115,7 @@ export function Guide() {
           </tr>
           <tr>
             <td>650 words</td>
-            <td>The Common App personal essay maximum</td>
+            <td>The long-standing Common App personal essay maximum (confirm in your application)</td>
             <td>About 3 minutes</td>
           </tr>
           <tr>

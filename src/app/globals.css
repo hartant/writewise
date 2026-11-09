@@ -254,7 +254,7 @@ h3 {
   }
   .paper::placeholder {
     color: var(--muted);
-    opacity: 0.75;
+    opacity: 1;
   }
 
   /* Margin notes: the editor's tally beside the page. */

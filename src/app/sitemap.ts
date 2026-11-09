@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, site } from "@/lib/site";
 import { tools, toolPath } from "@/lib/tools";
 import { posts, postPath } from "@/lib/posts";
 
@@ -9,7 +9,8 @@ export const dynamic = "force-static";
 const SITE_UPDATED = "2026-11-09";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const page = (path: string, lastModified = SITE_UPDATED) => ({ url: absoluteUrl(path), lastModified });
+  // The homepage URL has no trailing slash, matching the canonical tag Next.js renders.
+  const page = (path: string, lastModified = SITE_UPDATED) => ({ url: path === "/" ? site.url : absoluteUrl(path), lastModified });
   return [
     page("/"),
     page("/tools"),

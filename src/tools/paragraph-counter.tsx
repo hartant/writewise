@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { countCharacters, countSentences, countWords, splitParagraphs, type ParagraphMode } from "@/lib/text/stats";
-import { fmt, Paper, SAMPLE_ESSAY, Stat, StatGrid } from "./ui";
+import { fmt, Paper, SAMPLE_ESSAY, Segmented, Stat, StatGrid } from "./ui";
 
 const LONG_PARAGRAPH = 150;
 const MAX_ROWS = 200;
@@ -40,14 +40,15 @@ export function ParagraphCounter() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-3">
-          <div className="seg" role="radiogroup" aria-label="How paragraphs are separated">
-            <button type="button" role="radio" aria-checked={mode === "line"} onClick={() => setMode("line")}>
-              Every line break
-            </button>
-            <button type="button" role="radio" aria-checked={mode === "blank"} onClick={() => setMode("blank")}>
-              Blank lines only
-            </button>
-          </div>
+          <Segmented
+            label="How paragraphs are separated"
+            value={mode}
+            onChange={setMode}
+            options={[
+              { value: "line", label: "Every line break" },
+              { value: "blank", label: "Blank lines only" },
+            ]}
+          />
           <Paper
             id="pc-input"
             label="Your text"
