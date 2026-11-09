@@ -1,0 +1,469 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * WriteWise identity: "the manuscript and the blue pencil".
+ * Paper is white, type is navy ink, and indigo is the editor's blue pencil,
+ * used sparingly for marks, active states and the numbers that matter.
+ */
+:root {
+  --canvas: #f5f6fa; /* the desk */
+  --surface: #ffffff; /* paper */
+  --surface-2: #eef0f6; /* paper in shadow */
+  --ink: #121a3d; /* navy ink */
+  --ink-2: #2e3658;
+  --muted: #5c6483;
+  --line: #dce0ec; /* ruled hairline */
+  --line-strong: #c3c9dc;
+  --accent: #4b3fd8; /* blue pencil */
+  --accent-ink: #ffffff;
+  --accent-soft: #eceafe;
+  --accent-text: #3b2fc4;
+  --ok: #1f7a4d;
+  --ok-soft: #e6f4ec;
+  --warn: #a15c07;
+  --warn-soft: #fbf1e1;
+  --bad: #b42318;
+  --bad-soft: #fcebea;
+  --ring: rgb(75 63 216 / 0.3);
+  --sheet-shadow: 0 1px 0 var(--line), 0 22px 40px -30px rgb(18 26 61 / 0.45);
+  color-scheme: light;
+}
+
+.dark {
+  --canvas: #0d1129;
+  --surface: #151a38;
+  --surface-2: #1b2145;
+  --ink: #e7e9f6;
+  --ink-2: #c5c9e2;
+  --muted: #9198ba;
+  --line: #262d52;
+  --line-strong: #353d68;
+  --accent: #a39cff;
+  --accent-ink: #0d1129;
+  --accent-soft: #221f4f;
+  --accent-text: #b7b1ff;
+  --ok: #5fd39a;
+  --ok-soft: #12291f;
+  --warn: #f2b25c;
+  --warn-soft: #2b2212;
+  --bad: #ff8a80;
+  --bad-soft: #2f1518;
+  --ring: rgb(163 156 255 / 0.4);
+  --sheet-shadow: 0 1px 0 var(--line), 0 22px 40px -30px rgb(0 0 0 / 0.8);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-literata), ui-serif, Georgia, serif;
+  --font-mono: var(--font-courier), "Courier New", ui-monospace, monospace;
+  --shadow-card: var(--sheet-shadow);
+  --shadow-lift: var(--sheet-shadow);
+}
+
+/* ---------- Base ---------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .container-ww {
+    width: 100%;
+    max-width: 74rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-ww {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* A sheet of paper on the desk. Used for tools, panels and the FAQ. */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: var(--sheet-shadow);
+  }
+
+  /* The hero manuscript: a second sheet peeks out from underneath. */
+  .sheet-stack {
+    position: relative;
+    isolation: isolate;
+  }
+  .sheet-stack::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translate(6px, 6px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    z-index: -1;
+  }
+
+  /* Pencil link: a blue-pencil underline that thickens on hover. */
+  .pencil-link {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 150ms, text-decoration-thickness 150ms;
+  }
+  .pencil-link:hover {
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    transition: background-color 150ms, border-color 150ms, color 150ms;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .btn-primary {
+    color: var(--canvas);
+    background: var(--ink);
+  }
+  .btn-primary:hover {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-secondary {
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+  }
+  .btn-secondary:hover {
+    border-color: var(--ink);
+  }
+  .btn-ghost {
+    color: var(--muted);
+  }
+  .btn-ghost:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+
+  .field {
+    width: 100%;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.45rem 0.7rem;
+    font-size: 1rem;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+
+  /* The writing surface: typed manuscript, Courier, generous line spacing. */
+  .paper {
+    width: 100%;
+    display: block;
+    resize: vertical;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: var(--surface);
+    border: 0;
+  }
+  @media (min-width: 640px) {
+    .paper {
+      padding: 1.5rem 2.25rem 2rem;
+    }
+  }
+  .paper:focus {
+    outline: none;
+  }
+  .paper::placeholder {
+    color: var(--muted);
+    opacity: 0.75;
+  }
+
+  /* Margin notes: the editor's tally beside the page. */
+  .note {
+    border-top: 1px solid var(--line);
+    padding-top: 0.6rem;
+  }
+  .note dt {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .note dd {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-top: 0.15rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .note.is-key {
+    border-top: 2px solid var(--accent);
+  }
+  .note.is-key dd {
+    color: var(--accent-text);
+    font-size: 2.5rem;
+  }
+
+  /* Segmented choice: a row of typed options, the active one inked in. */
+  .seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .seg button {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--muted);
+    border-right: 1px solid var(--line);
+    transition: background-color 150ms, color 150ms;
+  }
+  .seg button:last-child {
+    border-right: 0;
+  }
+  .seg button:hover {
+    color: var(--ink);
+  }
+  .seg button[aria-pressed="true"],
+  .seg button[aria-checked="true"] {
+    background: var(--ink);
+    color: var(--canvas);
+  }
+
+  .toggle {
+    appearance: none;
+    width: 2.25rem;
+    height: 1.3rem;
+    border-radius: 999px;
+    background: var(--line-strong);
+    position: relative;
+    transition: background-color 150ms;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 0.15rem;
+    left: 0.15rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+    transition: transform 150ms;
+  }
+  .toggle:checked {
+    background: var(--accent);
+  }
+  .toggle:checked::after {
+    transform: translateX(0.95rem);
+  }
+
+  /* Proofreading marks: insertions in blue pencil, deletions struck through. */
+  .diff-ins {
+    color: var(--accent-text);
+    background: var(--accent-soft);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    border-radius: 2px;
+  }
+  .diff-del {
+    color: var(--bad);
+    text-decoration: line-through;
+    text-decoration-color: var(--bad);
+    text-decoration-thickness: 2px;
+    opacity: 0.85;
+  }
+  .diff-del + .diff-ins {
+    margin-left: 0.2em;
+  }
+
+  .eyebrow {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+}
+
+/* ---------- Long-form content ---------- */
+.prose-ww {
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose-ww > * + * {
+  margin-top: 1.1em;
+}
+.prose-ww h2 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 2.2em;
+  scroll-margin-top: 6rem;
+}
+.prose-ww h3 {
+  color: var(--ink);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  font-weight: 700;
+  margin-top: 1.8em;
+  scroll-margin-top: 6rem;
+}
+.prose-ww h2 + *,
+.prose-ww h3 + * {
+  margin-top: 0.6em;
+}
+.prose-ww a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.prose-ww a:hover {
+  color: var(--accent-text);
+}
+.prose-ww strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+.prose-ww ul,
+.prose-ww ol {
+  padding-left: 1.4em;
+}
+.prose-ww ul {
+  list-style: disc;
+}
+.prose-ww ol {
+  list-style: decimal;
+}
+.prose-ww li + li {
+  margin-top: 0.4em;
+}
+.prose-ww li::marker {
+  color: var(--muted);
+}
+.prose-ww blockquote {
+  font-family: var(--font-mono);
+  font-size: 0.98rem;
+  border-left: 2px solid var(--accent);
+  padding: 0.2em 0 0.2em 1.1em;
+  color: var(--ink);
+}
+.prose-ww code {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  background: var(--surface-2);
+  border-radius: 3px;
+  padding: 0.05em 0.35em;
+}
+.prose-ww table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose-ww th,
+.prose-ww td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.6em 0.9em 0.6em 0;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-ww th {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 1px solid var(--ink);
+}
+.prose-ww .callout {
+  border-left: 2px solid var(--accent);
+  padding: 0.25rem 0 0.25rem 1.1rem;
+  color: var(--ink);
+}
